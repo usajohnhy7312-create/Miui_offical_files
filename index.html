@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Support - Firmware & Tools</title>
+    <title>Xiaomi Official Support - Firmware & Tools</title>
     <style>
         :root {
             --mi-orange: #ff6700;
@@ -51,7 +51,28 @@
             padding: 15px;
         }
 
-        /* Device Info Card (Miui 14 Style) */
+        /* Brand Trust Banner */
+        .brand-banner {
+            background: linear-gradient(135deg, #ff6700, #ff8533);
+            color: white;
+            padding: 20px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(255, 103, 0, 0.2);
+        }
+
+        .brand-banner h1 {
+            font-size: 22px;
+            margin-bottom: 8px;
+        }
+
+        .brand-banner p {
+            font-size: 13px;
+            line-height: 1.5;
+            opacity: 0.95;
+        }
+
+        /* Device Info Card */
         .device-card {
             background: var(--card-bg);
             border-radius: 16px;
@@ -115,7 +136,7 @@
             color: #222;
         }
 
-        /* Download Section Buttons */
+        /* Action Buttons */
         .action-btn {
             display: block;
             width: 100%;
@@ -130,7 +151,7 @@
             cursor: pointer;
             transition: background 0.2s;
             text-decoration: none;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
 
         .action-btn:hover {
@@ -144,7 +165,16 @@
             background-color: #111;
         }
 
-        /* Target Page / Modal Overlay */
+        .btn-outline {
+            background-color: transparent;
+            color: #555;
+            border: 2px solid #ccc;
+        }
+        .btn-outline:hover {
+            background-color: #eee;
+        }
+
+        /* Target Page Overlay */
         .overlay-page {
             position: fixed;
             top: 0;
@@ -238,6 +268,18 @@
             border-radius: 8px;
         }
 
+        .qr-price-tag {
+            font-size: 20px;
+            font-weight: bold;
+            color: #111;
+            margin: 5px 0 15px 0;
+            background: #fff3cd;
+            display: inline-block;
+            padding: 4px 15px;
+            border-radius: 6px;
+            border: 1px dashed #ffeeba;
+        }
+
         .upi-id {
             background: #f1f3f4;
             padding: 8px;
@@ -324,14 +366,18 @@
 </head>
 <body>
 
-    <!-- Navbar -->
     <div class="navbar">
         <div class="logo"><span>mi</span> Service Center</div>
         <div style="font-size: 12px; color: #888;">Official Support Mirror</div>
     </div>
 
-    <!-- Main Content Page -->
     <div class="container">
+        
+        <div class="brand-banner">
+            <h1>Xiaomi Premium Software Support</h1>
+            <p>Welcome to the trusted service center hub. Xiaomi is committed to providing seamless performance, high-grade security patches, and official kernel optimization tools to unlock the true power of your hardware safely.</p>
+        </div>
+
         <div class="device-card">
             <div class="device-header">
                 <div class="miui-logo">14</div>
@@ -362,12 +408,12 @@
 
             <hr style="border: 0; border-top: 1px solid #eee; margin-bottom: 20px;">
             
-            <h3 style="margin-bottom: 12px; font-size: 16px;">Available Device Files</h3>
+            <h3 style="margin-bottom: 12px; font-size: 16px; color:#444;">Available Device Files</h3>
             <button class="action-btn" onclick="openDownloadPage()">Download Device Files</button>
+            <button class="action-btn btn-outline" onclick="downloadAllFilesMessage()">Download All Files</button>
         </div>
     </div>
 
-    <!-- New Page Layer (Opens on Download click) -->
     <div id="downloadPage" class="overlay-page">
         <div class="overlay-header">
             <button class="back-btn" onclick="closeDownloadPage()">←</button>
@@ -376,7 +422,6 @@
 
         <div style="max-width: 500px; margin: 0 auto;">
             
-            <!-- Option 1: Unlockfile.zip -->
             <div class="product-box">
                 <div class="product-info">
                     <div>
@@ -388,7 +433,6 @@
                 <button class="buy-btn" onclick="startPayment('Unlockfile.zip', 350)">Buy Now</button>
             </div>
 
-            <!-- Option 2: boot.img -->
             <div class="product-box">
                 <div class="product-info">
                     <div>
@@ -400,7 +444,6 @@
                 <button class="buy-btn" onclick="startPayment('boot.img File', 249)">Buy Now</button>
             </div>
 
-            <!-- Option 3: Others -->
             <div class="product-box" style="border-style: dashed;">
                 <div class="product-info">
                     <div>
@@ -411,22 +454,21 @@
                 <button class="buy-btn btn-secondary" onclick="window.open('https://miui.com', '_blank')">Visit MIUI Official</button>
             </div>
 
-            <!-- Dynamic Payment Section -->
             <div id="paymentSection" class="payment-section">
                 <div class="amount-header">Payable Amount: ₹<span id="payableAmount">0</span></div>
-                <p style="font-size: 13px; color: #55px;">Scan the QR code below via any UPI App (PhonePe, GPay, Paytm)</p>
+                <p style="font-size: 13px; color: #555;">Scan the QR code below via any UPI App (PhonePe, GPay, Paytm)</p>
                 
                 <div class="qr-container">
-                    <!-- Make sure qr.jpg is in the same directory -->
                     <img src="qr.jpg" alt="UPI Payment QR Code">
                 </div>
+                
+                <div class="qr-price-tag">Amount to Pay: ₹<span id="qrAmountTag">0</span></div>
                 
                 <div>
                     <span style="font-size: 12px; color: #666; display:block;">Merchant UPI ID:</span>
                     <div class="upi-id">YOUR_UPI_ID@okaxis</div>
                 </div>
 
-                <!-- Submission Form -->
                 <form class="payment-form" onsubmit="handleFormSubmit(event)">
                     <div class="form-group">
                         <label>Enter Your Name *</label>
@@ -438,23 +480,20 @@
                     </div>
                     <div class="form-group">
                         <label>UTR ID / Transaction Ref No. *</label>
-                        <input type="text" id="userUtr" required placeholder="12 Digit UTR Number">
+                        <input type="number" inputmode="numeric" id="userUtr" required placeholder="12 Digit UTR Number" oninput="limitUtrLength(this)">
                     </div>
 
                     <button type="submit" class="action-btn" style="background:#007bff; margin-top:10px;">Submit Verification</button>
                 </form>
 
-                <!-- Status Overlay Window after Submit -->
                 <div id="successStatus" style="display:none; background: #fff3cd; padding: 15px; border-radius: 8px; border: 1px solid #ffeeba; margin-top: 15px; text-align: center;">
                     <div style="font-weight: bold; color: #856404;"><span class="pending-anim"></span> Payment Status: PENDING</div>
                     <p style="font-size: 12px; margin-top:5px; color: #666;">Your UTR is undergoing manual backend mapping. File access details will appear below shortly.</p>
                 </div>
 
-                <!-- History Area -->
                 <div class="history-box">
                     <h4 style="font-size: 14px; color:#444;">Transaction History</h4>
                     <div id="historyList">
-                        <!-- History data loads dynamically -->
                         <p id="noHistoryText" style="font-size: 12px; color:#999; italic; margin-top: 5px;">No active requests found.</p>
                     </div>
                 </div>
@@ -467,7 +506,6 @@
         let selectedFileName = "";
         let selectedFilePrice = 0;
 
-        // Open/Close functions for navigation
         function openDownloadPage() {
             document.getElementById('downloadPage').style.display = 'block';
             window.scrollTo(0, 0);
@@ -477,20 +515,30 @@
             document.getElementById('downloadPage').style.display = 'none';
         }
 
-        // Active Payment UI Controller
+        function downloadAllFilesMessage() {
+            alert("You can't buy any files yet");
+        }
+
+        function limitUtrLength(element) {
+            if (element.value.length > 12) {
+                element.value = element.value.slice(0, 12);
+            }
+        }
+
         function startPayment(fileName, price) {
             selectedFileName = fileName;
             selectedFilePrice = price;
             
+            // Updates both top and under-QR price fields
             document.getElementById('payableAmount').innerText = price;
+            document.getElementById('qrAmountTag').innerText = price;
+            
             document.getElementById('paymentSection').style.display = 'block';
             document.getElementById('successStatus').style.display = 'none';
             
-            // Auto scroll down to view barcode area smoothly
             document.getElementById('paymentSection').scrollIntoView({ behavior: 'smooth' });
         }
 
-        // Submission workflow
         function handleFormSubmit(e) {
             e.preventDefault();
             
@@ -498,10 +546,12 @@
             const phone = document.getElementById('userPhone').value;
             const utr = document.getElementById('userUtr').value;
 
-            // Display instantaneous Status indicator box
-            document.getElementById('successStatus').style.display = 'block';
+            if (utr.length !== 12) {
+                alert("Please enter a valid 12-digit UTR number.");
+                return;
+            }
 
-            // Add dynamic entry to history view block
+            document.getElementById('successStatus').style.display = 'block';
             document.getElementById('noHistoryText').style.display = 'none';
             const historyList = document.getElementById('historyList');
             
@@ -515,14 +565,10 @@
                 <span class="status-badge"><span class="pending-anim"></span>Pending</span>
             `;
             
-            // Insert the newest entry at top of log tracking system
             historyList.insertBefore(item, historyList.firstChild);
-
-            // Reset only input variables for convenience
             document.getElementById('userUtr').value = "";
             alert("Verification Request Submitted! Please wait for confirmation.");
         }
     </script>
 </body>
 </html>
-
