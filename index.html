@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Support - Firmware & Tools</title>
+    <style>
+        :root {
+            --mi-orange: #ff6700;
+            --bg-color: #f7f7f7;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        /* Navbar */
+        .navbar {
+            background-color: #fff;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #e0e0e0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .navbar .logo {
+            font-weight: bold;
+            font-size: 20px;
+            color: var(--mi-orange);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 15px;
+        }
+
+        /* Device Info Card (Miui 14 Style) */
+        .device-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+
+        .device-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .miui-logo {
+            width: 65px;
+            height: 65px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: bold;
+            border-radius: 14px;
+        }
+
+        .device-title h2 {
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+
+        .device-title p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .specs-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .spec-item {
+            background: #f9f9f9;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #eee;
+        }
+
+        .spec-item span {
+            display: block;
+            font-size: 12px;
+            color: #777;
+        }
+
+        .spec-item strong {
+            font-size: 14px;
+            color: #222;
+        }
+
+        /* Download Section Buttons */
+        .action-btn {
+            display: block;
+            width: 100%;
+            background-color: var(--mi-orange);
+            color: white;
+            text-align: center;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            text-decoration: none;
+            margin-bottom: 10px;
+        }
+
+        .action-btn:hover {
+            background-color: #e05a00;
+        }
+
+        .btn-secondary {
+            background-color: #333;
+        }
+        .btn-secondary:hover {
+            background-color: #111;
+        }
+
+        /* Target Page / Modal Overlay */
+        .overlay-page {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #ffffff;
+            z-index: 1000;
+            display: none;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .overlay-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 20px;
+        }
+
+        .back-btn {
+            font-size: 24px;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+
+        /* Product Box */
+        .product-box {
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            background: #fff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+        }
+
+        .product-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .product-name {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .product-price {
+            color: var(--mi-orange);
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .buy-btn {
+            width: 100%;
+            background: #25d366;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* Payment Section */
+        .payment-section {
+            display: none;
+            margin-top: 20px;
+            border-top: 2px dashed #ddd;
+            padding-top: 20px;
+            text-align: center;
+        }
+
+        .amount-header {
+            font-size: 22px;
+            font-weight: bold;
+            color: #d32f2f;
+            margin-bottom: 10px;
+        }
+
+        .qr-container img {
+            width: 200px;
+            height: 200px;
+            margin: 10px auto;
+            border: 1px solid #ccc;
+            padding: 5px;
+            border-radius: 8px;
+        }
+
+        .upi-id {
+            background: #f1f3f4;
+            padding: 8px;
+            border-radius: 6px;
+            display: inline-block;
+            font-family: monospace;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        /* Form Inputs */
+        .payment-form {
+            text-align: left;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        /* Status & History */
+        .status-badge {
+            display: inline-block;
+            background: #fff3cd;
+            color: #856404;
+            padding: 5px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        .history-box {
+            margin-top: 25px;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+            text-align: left;
+        }
+
+        .history-item {
+            background: #fafafa;
+            border: 1px solid #eee;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .pending-anim {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background-color: #856404;
+            border-radius: 50%;
+            margin-right: 5px;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0% { opacity: 0.2; }
+            50% { opacity: 1; }
+            100% { opacity: 0.2; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="logo"><span>mi</span> Service Center</div>
+        <div style="font-size: 12px; color: #888;">Official Support Mirror</div>
+    </div>
+
+    <!-- Main Content Page -->
+    <div class="container">
+        <div class="device-card">
+            <div class="device-header">
+                <div class="miui-logo">14</div>
+                <div class="device-title">
+                    <h2>Redmi 10</h2>
+                    <p>MIUI Global 14.0.7 (TGEINXM)</p>
+                </div>
+            </div>
+
+            <div class="specs-grid">
+                <div class="spec-item">
+                    <span>Android Version</span>
+                    <strong>13 (TKQ1.221114.001)</strong>
+                </div>
+                <div class="spec-item">
+                    <span>Security Update</span>
+                    <strong>2024-09-01</strong>
+                </div>
+                <div class="spec-item">
+                    <span>RAM</span>
+                    <strong>4.0 + 1.0 GB</strong>
+                </div>
+                <div class="spec-item">
+                    <span>Model</span>
+                    <strong>220333QBI</strong>
+                </div>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #eee; margin-bottom: 20px;">
+            
+            <h3 style="margin-bottom: 12px; font-size: 16px;">Available Device Files</h3>
+            <button class="action-btn" onclick="openDownloadPage()">Download Device Files</button>
+        </div>
+    </div>
+
+    <!-- New Page Layer (Opens on Download click) -->
+    <div id="downloadPage" class="overlay-page">
+        <div class="overlay-header">
+            <button class="back-btn" onclick="closeDownloadPage()">←</button>
+            <h2 style="font-size: 18px;">File Download Center</h2>
+        </div>
+
+        <div style="max-width: 500px; margin: 0 auto;">
+            
+            <!-- Option 1: Unlockfile.zip -->
+            <div class="product-box">
+                <div class="product-info">
+                    <div>
+                        <div class="product-name">📁 Unlockfile.zip</div>
+                        <div style="font-size: 12px; color: #666;">Complete Bootloader Unlock Tool Package</div>
+                    </div>
+                    <div class="product-price">₹350</div>
+                </div>
+                <button class="buy-btn" onclick="startPayment('Unlockfile.zip', 350)">Buy Now</button>
+            </div>
+
+            <!-- Option 2: boot.img -->
+            <div class="product-box">
+                <div class="product-info">
+                    <div>
+                        <div class="product-name">📄 boot.img File</div>
+                        <div style="font-size: 12px; color: #666;">Stock Boot Image patched for Redmi 10</div>
+                    </div>
+                    <div class="product-price">₹249</div>
+                </div>
+                <button class="buy-btn" onclick="startPayment('boot.img File', 249)">Buy Now</button>
+            </div>
+
+            <!-- Option 3: Others -->
+            <div class="product-box" style="border-style: dashed;">
+                <div class="product-info">
+                    <div>
+                        <div class="product-name">🌐 Others</div>
+                        <div style="font-size: 12px; color: #666;">Redirect to official global firmware archive</div>
+                    </div>
+                </div>
+                <button class="buy-btn btn-secondary" onclick="window.open('https://miui.com', '_blank')">Visit MIUI Official</button>
+            </div>
+
+            <!-- Dynamic Payment Section -->
+            <div id="paymentSection" class="payment-section">
+                <div class="amount-header">Payable Amount: ₹<span id="payableAmount">0</span></div>
+                <p style="font-size: 13px; color: #55px;">Scan the QR code below via any UPI App (PhonePe, GPay, Paytm)</p>
+                
+                <div class="qr-container">
+                    <!-- Make sure qr.jpg is in the same directory -->
+                    <img src="qr.jpg" alt="UPI Payment QR Code">
+                </div>
+                
+                <div>
+                    <span style="font-size: 12px; color: #666; display:block;">Merchant UPI ID:</span>
+                    <div class="upi-id">YOUR_UPI_ID@okaxis</div>
+                </div>
+
+                <!-- Submission Form -->
+                <form class="payment-form" onsubmit="handleFormSubmit(event)">
+                    <div class="form-group">
+                        <label>Enter Your Name *</label>
+                        <input type="text" id="userName" required placeholder="John Doe">
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number *</label>
+                        <input type="tel" id="userPhone" pattern="[0-9]{10}" required placeholder="10 Digit Mobile Number">
+                    </div>
+                    <div class="form-group">
+                        <label>UTR ID / Transaction Ref No. *</label>
+                        <input type="text" id="userUtr" required placeholder="12 Digit UTR Number">
+                    </div>
+
+                    <button type="submit" class="action-btn" style="background:#007bff; margin-top:10px;">Submit Verification</button>
+                </form>
+
+                <!-- Status Overlay Window after Submit -->
+                <div id="successStatus" style="display:none; background: #fff3cd; padding: 15px; border-radius: 8px; border: 1px solid #ffeeba; margin-top: 15px; text-align: center;">
+                    <div style="font-weight: bold; color: #856404;"><span class="pending-anim"></span> Payment Status: PENDING</div>
+                    <p style="font-size: 12px; margin-top:5px; color: #666;">Your UTR is undergoing manual backend mapping. File access details will appear below shortly.</p>
+                </div>
+
+                <!-- History Area -->
+                <div class="history-box">
+                    <h4 style="font-size: 14px; color:#444;">Transaction History</h4>
+                    <div id="historyList">
+                        <!-- History data loads dynamically -->
+                        <p id="noHistoryText" style="font-size: 12px; color:#999; italic; margin-top: 5px;">No active requests found.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedFileName = "";
+        let selectedFilePrice = 0;
+
+        // Open/Close functions for navigation
+        function openDownloadPage() {
+            document.getElementById('downloadPage').style.display = 'block';
+            window.scrollTo(0, 0);
+        }
+
+        function closeDownloadPage() {
+            document.getElementById('downloadPage').style.display = 'none';
+        }
+
+        // Active Payment UI Controller
+        function startPayment(fileName, price) {
+            selectedFileName = fileName;
+            selectedFilePrice = price;
+            
+            document.getElementById('payableAmount').innerText = price;
+            document.getElementById('paymentSection').style.display = 'block';
+            document.getElementById('successStatus').style.display = 'none';
+            
+            // Auto scroll down to view barcode area smoothly
+            document.getElementById('paymentSection').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Submission workflow
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('userName').value;
+            const phone = document.getElementById('userPhone').value;
+            const utr = document.getElementById('userUtr').value;
+
+            // Display instantaneous Status indicator box
+            document.getElementById('successStatus').style.display = 'block';
+
+            // Add dynamic entry to history view block
+            document.getElementById('noHistoryText').style.display = 'none';
+            const historyList = document.getElementById('historyList');
+            
+            const item = document.createElement('div');
+            item.className = 'history-item';
+            item.innerHTML = `
+                <div>
+                    <strong>${selectedFileName}</strong><br>
+                    <span style="font-size:11px; color:#666;">UTR: ${utr} | Price: ₹${selectedFilePrice}</span>
+                </div>
+                <span class="status-badge"><span class="pending-anim"></span>Pending</span>
+            `;
+            
+            // Insert the newest entry at top of log tracking system
+            historyList.insertBefore(item, historyList.firstChild);
+
+            // Reset only input variables for convenience
+            document.getElementById('userUtr').value = "";
+            alert("Verification Request Submitted! Please wait for confirmation.");
+        }
+    </script>
+</body>
+</html>
+
